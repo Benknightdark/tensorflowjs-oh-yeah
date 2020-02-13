@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:run": "parcel ./site/index2.html",
-    "start": "concurrently npm:start:* "
+    "start:run": "parcel ./site/*",
+    "start": "concurrently npm:start:* ",
+    "build":"parcel build ./site/*"
   },
   "author": "",
   "license": "ISC",
