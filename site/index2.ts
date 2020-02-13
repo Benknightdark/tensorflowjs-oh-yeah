@@ -1,5 +1,5 @@
 import { MnistData } from './data';
-import { visor, show } from '@tensorflow/tfjs-vis'
+import { visor, show, metrics, render } from '@tensorflow/tfjs-vis'
 import { tidy, browser, sequential, layers ,train} from '@tensorflow/tfjs'
 async function showExamples(data) {
   // Create a container in the visor
@@ -124,6 +124,41 @@ async function trainModel(model, data) {
     callbacks: fitCallbacks
   });
 }
+
+
+const classNames = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+
+function doPrediction(model, data, testDataSize = 500) {
+  const IMAGE_WIDTH = 28;
+  const IMAGE_HEIGHT = 28;
+  const testData = data.nextTestBatch(testDataSize);
+  const testxs = testData.xs.reshape([testDataSize, IMAGE_WIDTH, IMAGE_HEIGHT, 1]);
+  const labels = testData.labels.argMax([-1]);
+  const preds = model.predict(testxs).argMax([-1]);
+
+  testxs.dispose();
+  return [preds, labels];
+}
+
+
+async function showAccuracy(model, data) {
+  const [preds, labels] = doPrediction(model, data);
+  const classAccuracy = await metrics.perClassAccuracy(labels, preds);
+  const container = {name: 'Accuracy', tab: 'Evaluation'};
+  show.perClassAccuracy(container, classAccuracy, classNames);
+
+  labels.dispose();
+}
+
+async function showConfusion(model, data) {
+  const [preds, labels] = doPrediction(model, data);
+  const confusionMatrix = await metrics.confusionMatrix(labels, preds);
+  const container = {name: 'Confusion Matrix', tab: 'Evaluation'};
+  render.confusionMatrix(
+      container, {values: confusionMatrix,tickLabels:classNames});
+
+  labels.dispose();
+}
 async function run() {
   const data = new MnistData();
   await data.load();
@@ -132,6 +167,8 @@ async function run() {
   console.log(model);
   show.modelSummary({ name: 'Model Architecture' }, model);
   await trainModel(model, data);
+  await showAccuracy(model, data);
+await showConfusion(model, data);
 }
 
 document.addEventListener('DOMContentLoaded', run);
