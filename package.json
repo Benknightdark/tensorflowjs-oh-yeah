@@ -7,18 +7,20 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:run": "parcel ./site/*",
     "start": "concurrently npm:start:* ",
-    "build":"parcel build ./site/*"
+    "build": "parcel build ./site/*"
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@tensorflow/tfjs": "^1.5.2",
-    "@tensorflow/tfjs-node": "^1.5.2",
-    "@tensorflow/tfjs-vis": "^1.4.0"
-  },
   "devDependencies": {
-    "concurrently": "^5.1.0",
-    "parcel": "^1.12.4",
-    "typescript": "^3.7.5"
+    "clang-format": "~1.4.0",
+    "mkdirp": "~1.0.3",
+    "webpack": "~4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "~3.10.3"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^1.5.2",
+    "argparse": "^1.0.10",
+    "socket.io": "~2.3.0"
   }
 }
