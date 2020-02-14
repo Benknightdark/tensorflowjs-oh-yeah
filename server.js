@@ -1,4 +1,4 @@
-require('@tensorflow/tfjs-node');
+require('@tensorflow/tfjs-node-gpu');
 
 const http = require('http');
 const socketio = require('socket.io');
